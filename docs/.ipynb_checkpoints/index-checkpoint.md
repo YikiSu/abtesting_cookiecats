@@ -1066,11 +1066,11 @@ test_chisquared(retention7_contingency)
 
 We have conducted three testings using different metrics. However, the metric should be decided before running the test and should be depended on the business goal.
 
-1. When we use the continuous metric (*sum_gamerounds*: the number of game rounds played by the player during the first week after installation), the result is not significant. It suggests that from the controlled version A (*the first gate was placed at level 30*) to the variant version B (*the first gate was placed at level 40*) does not make a difference and the company should not make the change.
+1. When we use the continuous metric (*sum_gamerounds*: the number of game rounds played by the player during the first week after installation), the result is not significant. It suggests that changing from the controlled version A (*the first gate was placed at level 30*) to the variant version B (*the first gate was placed at level 40*) does not make a difference and the company should not make the change.
 
-2. When we use the discrete metric (*retention_1*: did the player come back and play 1 day after installing), the result is not significant either. It suggests that from the controlled version A (*the first gate was placed at level 30*) to the variant version B (*the first gate was placed at level 40*) does not make a difference and the company should not make the change.
+2. When we use the discrete metric (*retention_1*: did the player come back and play 1 day after installing), the result is not significant either. It suggests that changing from the controlled version A (*the first gate was placed at level 30*) to the variant version B (*the first gate was placed at level 40*) does not make a difference and the company should not make the change.
 
-3. When we use the discrete metric (*retention_7*: did the player come back and play 7 days after installing), the result is significant. It suggests that from the controlled version A (*the first gate was placed at level 30*) to the variant version B (*the first gate was placed at level 40*) does make a difference. However, based on our initial data exploration, the retention rate for controlled version A is better than the variant version B. Therefore, the company should not make the change either. 
+3. When we use the discrete metric (*retention_7*: did the player come back and play 7 days after installing), the result is significant. It suggests that changing from the controlled version A (*the first gate was placed at level 30*) to the variant version B (*the first gate was placed at level 40*) does make a difference. However, based on our initial data exploration, the retention rate for controlled version A is better than the variant version B. Therefore, the company still should not make the change. 
 
 **Therefore, all three testings suggest the same result that the company should keep the first gate at level 30.**
 
