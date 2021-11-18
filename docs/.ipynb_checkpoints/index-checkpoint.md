@@ -849,7 +849,7 @@ normaility_check(data_40.sum_gamerounds)
     The null hypothesis is rejected, data does not follow normal distribution
     
 
-***Since the normality is not satisfied, we could go for *Mann–Whitney U test* without further checking the homogeneity.***
+***Since the normality is not satisfied, we could go for Mann–Whitney U test without further checking the homogeneity.***
 
 
 ```python
