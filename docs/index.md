@@ -26,37 +26,17 @@ There are various things we can do for A/B testing. For example, to change a col
 
 Assuming we are using *Click through rate* as a metric.
 
-For **two-tail testing**:
-
-The null hypothesis $H_0$ would be $$\text{Click through rate}_A = \text{Click through rate}_B$$
-
-The alternative hypothesis $H_A$ would be $$\text{Click through rate}_A \neq \text{Click through rate}_B$$
-
-For **one-tail testing**:
-
-The null hypothesis $H_0$ would be $$\text{Click through rate}_A = \text{Click through rate}_B$$
-
-The alternative hypothesis $H_A$ would be $$\text{Click through rate}_A > \text{Click through rate}_B$$ $$\text{OR}$$ $$\text{Click through rate}_A < \text{Click through rate}_B$$
+![PNG](hypotheses.PNG)
 
 ***4. Calculate Minimum Sample Size (if applicable)***
 
-We need to know the minimum sample size, so we could avoid the under coverage bias in our experiment, which is the bias from sampling too few observations. The formula for calculating the minimum sample size for one group is as followed:$$\frac{\sigma^2}{\delta^2}(Z_\frac{\alpha}{2} + Z_\frac{\beta}{2})^2$$
-
-- $\sigma$ is an estimated standard deviation. 
-    - For discrete metric, $\sigma^2 = P_A(1-P_A)+P_B(1-P_B)$ ($P_A$ is the discrete metric for controlled version A and $P_B$ is the discrete metric for assumed variant version B)
-    - For continuous metric, $\sigma^2 = \frac{2\sum (X_i - \overline{X})^2}{n}$
-
-- $\delta$ is the expected difference after changing from controlled version A to variant version B, it should be defined at the first step when we define the goal for the testing. If we expect there is a 2% increase in the click through rate, then $\delta$ = 2%.
-
-- $\alpha$ is the significance level we set for this testing (normally we set it to be 5%). The significance level, which is also called Type I error, is the probability that we reject the null hypothesis given the null hypothesis is true. It means we can accept that 5% of the time we are wrong when we reject the null hypothesis. Decreasing the $\alpha$ will make it harder for us to reject the null hypothesis and increase the Type II error. $Z_\frac{\alpha}{2}$ is 1.96 when $\alpha$ is 5%.
-
-- $\beta$ is Type II error (normally we set it to be 20%). Type II error is the probability that we fail to reject the null hypothesis when the null hypothesis is false. Type II error = 1 - power. Power is the probability that we accept the null hypothesis given the null hypothesis is true. When we increase the sample size, power will be increased and therefore Type II error will be decreased. $Z_\frac{\beta}{2}$ is 0.84 when $\beta$ is 20%.
+![PNG](min_samplesize.PNG)
 
 We should notice from the minimum sample size formula that larger difference would require a smaller sample size for detection while a smaller difference would require a larger sample size.
 
 ***5. Calculate the test duration***
 
-We would need to run the test long enough to collect the minimum sample size. Therefore, $$\text{test duration} = \frac{\text{minimum sample size}\times\text{number of groups (including the controlled group)}}{\text{average daily active user}}$$
+![PNG](duration.PNG)
 
 ***6. Start the experiment***
 
@@ -90,15 +70,7 @@ After the experiment is done and we finish collecting the experiment data, we ne
         - Small sample size and normality is not satisfied
     
 
->Test for normality (the data follows normal distribution):</br>
-(1) Histogram: plot the histogram of the data to see whether the data is normally distributed, however, if the sample size is small, it might not correctly represent the true distribution of the population. </br>
-(2) Quantile-quantile plot (Q-Q plot): if the Q-Q plot shows that the scatter plot of the data lie on the 45 degrees diagonal line, the data follows normal distribution. </br>
-(3) Shapiro-Wilk Test: a test that checks how likely the data is drawn from normal distribution if the sample size is smaller than 5000.</br>
-(4) D'Agostino's K2 test: a test that checks how likely the data is drawn from normal distribution if the sample size is larger than 5000
-
->Test for homogeneity (there are equal variances in all groups):</br>
-(1) Levene Test: a test that checks whether there are equal variances in all groups (when we have 2+ groups)</br>
-(2) F test: a test that checks whether there are equal variances in both groups (when we have exactly two groups of normally distributed data)</br>
+![PNG](test_selection.PNG)
 
 ***9. Calculate p-value***
 
@@ -108,7 +80,8 @@ After selecting the appropriate test, we should calculate the test statistic. Th
 
 ***10. Draw the conclusion***
 
-We need to compare the **p-value** with the $\alpha$ that we choose. If the **p-value** is smaller than $\alpha$, reject the null hypothesis and accept the alternative hypothesis that changing from version **A** to version **B** does make a difference. Else, we do not reject the null hypothesis that **A** to version **B** does not make a difference.
+![PNG](conclusion.PNG)
+
 
 ## Example
 
@@ -239,11 +212,8 @@ data.info()
 
 There are 90,189 players in this dataset who installed the game while the AB-test was running. 
 
-**userid** - a unique number that identifies each player.</br>
-**version** - whether the player was put in the control group (gate_30 - a gate at level 30) or the test group (gate_40 - a gate at level 40).</br>
-**sum_gamerounds** - the number of game rounds played by the player during the first week after installation.</br>
-**retention_1** - did the player come back and play 1 day after installing?</br>
-**retention_7** - did the player come back and play 7 days after installing?
+![PNG](features.PNG)
+
 
 #### Exploration of *sum_gamerounds* (the number of game rounds played by the player during the first week after installation)
 
