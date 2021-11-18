@@ -1015,7 +1015,3 @@ We have conducted three testings using different metrics. However, the metric sh
 - https://towardsdatascience.com/how-to-conduct-a-b-testing-3076074a8458
 - https://www.kaggle.com/mustafacicek/a-b-testing-statistical-tests/notebook
 
-
-```python
-
-```
