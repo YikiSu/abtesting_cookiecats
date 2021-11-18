@@ -578,9 +578,15 @@ data_30 = data_30.query("sum_gamerounds<=3000")
 
 
 ```python
-px.histogram(data.query("sum_gamerounds<=3000"), x='sum_gamerounds', color='version',
-             labels={'sum_gamerounds':"The number of game rounds played by the player during the first week after installation",
-                    'version':"Version"})
+px.histogram(
+    data.query("sum_gamerounds<=3000"),
+    x="sum_gamerounds",
+    color="version",
+    labels={
+        "sum_gamerounds": "The number of game rounds played by the player during the first week after installation",
+        "version": "Version",
+    },
+)
 ```
 
 
@@ -597,12 +603,35 @@ The number of game rounds appears to be heavily right skewed. Majority of player
 
 
 ```python
-sorted_data = data.melt(id_vars=data.columns.tolist()[:3],value_vars=['retention_1', 'retention_7'], )
+sorted_data = data.melt(
+    id_vars=data.columns.tolist()[:3],
+    value_vars=["retention_1", "retention_7"],
+)
 
-count_data = sorted_data.iloc[:,[1,3,4]].value_counts().reset_index().rename(columns={0:'count'})
+count_data = (
+    sorted_data.iloc[:, [1, 3, 4]]
+    .value_counts()
+    .reset_index()
+    .rename(columns={0: "count"})
+)
 count_data
 
-retention_1=pd.DataFrame(count_data[(count_data['variable']=="retention_1")&(count_data['value']==True)].groupby('version').sum().loc[:,'count']/count_data[(count_data['variable']=="retention_1")].groupby('version').sum().loc[:,'count']).reset_index().rename(columns={'count':'retention_rate_after_one_day'})
+retention_1 = (
+    pd.DataFrame(
+        count_data[
+            (count_data["variable"] == "retention_1") & (count_data["value"] == True)
+        ]
+        .groupby("version")
+        .sum()
+        .loc[:, "count"]
+        / count_data[(count_data["variable"] == "retention_1")]
+        .groupby("version")
+        .sum()
+        .loc[:, "count"]
+    )
+    .reset_index()
+    .rename(columns={"count": "retention_rate_after_one_day"})
+)
 print("The retention rate after 1 day\n")
 retention_1
 ```
@@ -655,7 +684,22 @@ retention_1
 
 
 ```python
-retention_7=pd.DataFrame(count_data[(count_data['variable']=="retention_7")&(count_data['value']==True)].groupby('version').sum().loc[:,'count']/count_data[(count_data['variable']=="retention_7")].groupby('version').sum().loc[:,'count']).reset_index().rename(columns={'count':'retention_rate_after_seven_days'})
+retention_7 = (
+    pd.DataFrame(
+        count_data[
+            (count_data["variable"] == "retention_7") & (count_data["value"] == True)
+        ]
+        .groupby("version")
+        .sum()
+        .loc[:, "count"]
+        / count_data[(count_data["variable"] == "retention_7")]
+        .groupby("version")
+        .sum()
+        .loc[:, "count"]
+    )
+    .reset_index()
+    .rename(columns={"count": "retention_rate_after_seven_days"})
+)
 print("The retention rate after 7 days\n")
 retention_7
 ```
@@ -720,14 +764,24 @@ Although we can tell the data is not following the normal distribution from the 
 
 
 ```python
-fig_qqplot, axes_qqplot = plt.subplots(1, 3, figsize = (15, 4), facecolor = "#e5e5e5")
+fig_qqplot, axes_qqplot = plt.subplots(1, 3, figsize=(15, 4), facecolor="#e5e5e5")
 axes_qqplot = axes_qqplot.ravel()
 
 for ax in axes_qqplot:
-    sm.qqplot(data_30.sum_gamerounds, ax = axes_qqplot[0], marker = "x", line = "45", fit = True)
-    sm.qqplot(data_40.sum_gamerounds, ax = axes_qqplot[1], marker = "x", line = "45", fit = True)
-    sm.qqplot(data[data["sum_gamerounds"]<=3000].sum_gamerounds, ax = axes_qqplot[2], marker = "x", line = "45", fit = True)
-        
+    sm.qqplot(
+        data_30.sum_gamerounds, ax=axes_qqplot[0], marker="x", line="45", fit=True
+    )
+    sm.qqplot(
+        data_40.sum_gamerounds, ax=axes_qqplot[1], marker="x", line="45", fit=True
+    )
+    sm.qqplot(
+        data[data["sum_gamerounds"] <= 3000].sum_gamerounds,
+        ax=axes_qqplot[2],
+        marker="x",
+        line="45",
+        fit=True,
+    )
+
 axes_qqplot[0].set_title("QQ Plot for gate 30")
 axes_qqplot[1].set_title("QQ Plot for gate 40")
 axes_qqplot[2].set_title("QQ Plot for all data")
@@ -751,13 +805,17 @@ Since both groups' scatter points are not on the 45° degree line, the data is n
 def normaility_check(data, alpha=0.05):
     print("Null hypothesis: the data follows normal distribution")
     print("Alternative hypothesis: the data does not follow normal distribution\n")
-    
+
     test_statistic, p_value = stats.shapiro(data)
-    
+
     if p_value < alpha:
-        print(f"The p_value is {p_value}, which is smaller than the significance level of {alpha}. \nThe null hypothesis is rejected, data does not follow normal distribution")
+        print(
+            f"The p_value is {p_value}, which is smaller than the significance level of {alpha}. \nThe null hypothesis is rejected, data does not follow normal distribution"
+        )
     else:
-        print(f"The p_value is {p_value}, which is larger than the significance level of {alpha}. \nFail to reject the null hypothesis, data does follow normal distribution")
+        print(
+            f"The p_value is {p_value}, which is larger than the significance level of {alpha}. \nFail to reject the null hypothesis, data does follow normal distribution"
+        )
       
 ```
 
@@ -795,20 +853,23 @@ normaility_check(data_40.sum_gamerounds)
 
 
 ```python
-def mann_whitneyutest(data1, data2, alpha = 0.05):
-    
+def mann_whitneyutest(data1, data2, alpha=0.05):
+
     print("Null hypothesis: The two populations are equal.")
     print("Alternative hypothesis: The two populations are not equal.\n")
-    
+
     test_statistic, p_value = stats.mannwhitneyu(data1, data2)
-    
+
     print(f"The p-value for Mann-Whitney U test is {round(p_value, 10)}")
-    
-    
+
     if p_value < alpha:
-        print(f"The p_value is {round(p_value, 10)}, which is smaller than the significance level of {alpha}. \nThe null hypothesis is rejected, the two populations are not equal")
+        print(
+            f"The p_value is {round(p_value, 10)}, which is smaller than the significance level of {alpha}. \nThe null hypothesis is rejected, the two populations are not equal"
+        )
     else:
-        print(f"The p_value is {round(p_value, 10)}, which is larger than the significance level of {alpha}. Fail to reject the null hypothesis.\nThe two populations are equal")
+        print(
+            f"The p_value is {round(p_value, 10)}, which is larger than the significance level of {alpha}. Fail to reject the null hypothesis.\nThe two populations are equal"
+        )
 
 ```
 
@@ -941,19 +1002,25 @@ retention7_contingency
 
 
 ```python
-def test_chisquared(contingency_table, alpha = 0.05):
-    
+def test_chisquared(contingency_table, alpha=0.05):
+
     print("Null hypothesis: Version and retention rate are independent")
     print("Alternative hypothesis: Version and retention rate are not independent\n")
-    
-    chisquare, p_value, degree_of_freedom, expected = stats.chi2_contingency(contingency_table, correction = False)
-    
+
+    chisquare, p_value, degree_of_freedom, expected = stats.chi2_contingency(
+        contingency_table, correction=False
+    )
+
     print(f"The p_value for test is {p_value}")
-    
+
     if p_value < alpha:
-        print(f"The p_value is {round(p_value, 10)}, which is smaller than the significance level of {alpha}. The null hypothesis is rejected.\nVersion and retention rate are not independent")
+        print(
+            f"The p_value is {round(p_value, 10)}, which is smaller than the significance level of {alpha}. The null hypothesis is rejected.\nVersion and retention rate are not independent"
+        )
     else:
-        print(f"The p_value is {round(p_value, 10)}, which is larger than the significance level of {alpha}. Fail to reject the null hypothesis.\nVersion and retention rate are independent")
+        print(
+            f"The p_value is {round(p_value, 10)}, which is larger than the significance level of {alpha}. Fail to reject the null hypothesis.\nVersion and retention rate are independent"
+        )
 
 ```
 
